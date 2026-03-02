@@ -3,18 +3,19 @@ package it.unibo.pps.e1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GoldBankAccountTest {
+public class BronzeBankAccountTest {
     private CoreBankAccount core;
-    private GoldBankAccount account;
+    private BronzeBankAccount account;
     private final int DEPOSIT_VALUE = 1000;
     private final int EMPTY_ACCOUNT_VALUE = 0;
 
     @BeforeEach
     void init(){
         this.core = new CoreBankAccount();
-        this.account = new GoldBankAccount(core);
+        this.account = new BronzeBankAccount(this.core);
     }
 
     @Test
@@ -30,23 +31,24 @@ public class GoldBankAccountTest {
 
     @Test
     public void testCanWithdrawWithoutFee() {
-        int withdrawValue = 200;
+        int withdrawValue = 99;
         this.account.deposit(DEPOSIT_VALUE);
         this.account.withdraw(withdrawValue);
         assertEquals(DEPOSIT_VALUE - withdrawValue, this.account.getBalance());
     }
 
     @Test
-    public void testCanWithdrawMoreThanAvailable(){
-        int extendedWithdrawValue = 1500;
+    public void testCanWithdrawWithFee() {
+        int withdrawValue = 101;
+        int fee = 1;
         this.account.deposit(DEPOSIT_VALUE);
-        this.account.withdraw(extendedWithdrawValue);
-        assertEquals(DEPOSIT_VALUE - extendedWithdrawValue, this.account.getBalance());
+        this.account.withdraw(withdrawValue);
+        assertEquals(DEPOSIT_VALUE - withdrawValue - fee, this.account.getBalance());
     }
 
     @Test
-    public void testCannotWithdrawUnderMinusFiveHundredUnits(){
-        int overexceedWithdrawValue = 1501;
+    public void testCannotWithdrawUnderZeroUnits(){
+        int overexceedWithdrawValue = 1001;
         this.account.deposit(DEPOSIT_VALUE);
         assertThrows(IllegalStateException.class, ()->this.account.withdraw(overexceedWithdrawValue));
     }
