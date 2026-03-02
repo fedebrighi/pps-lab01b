@@ -1,21 +1,25 @@
 package it.unibo.pps.e1;
 
-public class BankAccount {
+/**
+ * An interface that defines the concpet of a bank account
+ */
+public interface BankAccount {
 
-    private CoreBankAccount base = new CoreBankAccount();
+    /**
+     * Returns the current balance of the bank account
+     * @return the current balance
+     */
+    int getBalance();
 
-    public int getBalance() {
-        return base.getBalance();
-    }
+    /**
+     * Adds the value of amount to the bank account
+     * @param amount the value to be added
+     */
+    void deposit(int amount);
 
-    public void deposit(int amount) {
-        base.deposit(amount);
-    }
-
-    public void withdraw(int amount) {
-        if (this.getBalance() < amount){
-            throw new IllegalStateException();
-        }
-        base.withdraw(amount + 1);
-    }
+    /**
+     * Removes the value of amount from the bank account
+     * @param amount the value to be removed
+     */
+    void withdraw(int amount);
 }
