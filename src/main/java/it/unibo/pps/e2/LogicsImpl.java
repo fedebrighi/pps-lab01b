@@ -6,21 +6,17 @@ public class LogicsImpl implements Logics {
 	
 	private final Pair<Integer,Integer> pawn;
 	private Pair<Integer,Integer> knight;
-	private final Random random = new Random();
-	private final int size;
+    private final int size;
 	private final KnightMoveValidator validator = new KnightMoveValidatorImpl();
-	private final RandomPositionGenerator generator = new RandomPositionGenerationImpl(random);
-	 
+	private final PawnHitChecker checker = new PawnHitCheckerImpl();
+
+
     public LogicsImpl(int size){
     	this.size = size;
-        this.pawn = this.generator.generateRandomEmpty(this.size,null);
-        this.knight = this.generator.generateRandomEmpty(this.size,pawn);
-    }
-    
-	private final Pair<Integer,Integer> randomEmptyPosition(){
-    	Pair<Integer,Integer> pos = new Pair<>(this.random.nextInt(size),this.random.nextInt(size));
-    	// the recursive call below prevents clash with an existing pawn
-    	return this.pawn!=null && this.pawn.equals(pos) ? randomEmptyPosition() : pos;
+        Random random = new Random();
+        RandomPositionGenerator generator = new RandomPositionGenerationImpl(random);
+        this.pawn = generator.generateRandomEmpty(this.size,null);
+        this.knight = generator.generateRandomEmpty(this.size,pawn);
     }
     
 	@Override
@@ -31,7 +27,7 @@ public class LogicsImpl implements Logics {
 		Pair<Integer,Integer> target = new Pair<>(row,col);
 		if(validator.isValidMove(knight,target,size)){
 			knight = target;
-			return this.pawn.equals(this.knight);
+			return this.checker.isPawnHit(this.knight,this.pawn);
 		}
 		return false;
 	}
@@ -48,21 +44,11 @@ public class LogicsImpl implements Logics {
 
 	@Override
 	public Pair<Integer,Integer> getKnightPosition() {
-		for(int i = 0; i < this.size; i++){
-			for (int j = 0; j < this.size; j++){
-				if (hasKnight(i,j)) return new Pair<>(i,j);
-			}
-		}
-		return null;
+		return this.knight;
 	}
 
 	@Override
 	public Pair<Integer,Integer> getPawnPosition() {
-		for(int i = 0; i < this.size; i++){
-			for (int j = 0; j < this.size; j++){
-				if (hasPawn(i,j)) return new Pair<>(i,j);
-			}
-		}
-		return null;
+		return this.pawn;
 	}
 }
