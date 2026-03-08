@@ -17,7 +17,7 @@ public class LogicTest {
     int knightCounter = 0;
     for (int i = 0; i < SIZE; i++){
       for (int j = 0; j < SIZE; j++){
-        if(logic.hasKnight(i,j)) knightCounter++;
+        if(this.logic.hasKnight(i,j)) knightCounter++;
       }
     }
     assertEquals(1,knightCounter);
@@ -28,7 +28,7 @@ public class LogicTest {
     int pawnCounter = 0;
     for (int i = 0; i < SIZE; i++){
       for (int j = 0; j < SIZE; j++){
-        if(logic.hasKnight(i,j)) pawnCounter++;
+        if(this.logic.hasKnight(i,j)) pawnCounter++;
       }
     }
     assertEquals(1,pawnCounter);
@@ -39,7 +39,7 @@ public class LogicTest {
     int knightOnPawnCounter = 0;
     for (int i = 0; i < SIZE; i++){
       for (int j = 0; j < SIZE; j++){
-        if(logic.hasKnight(i,j) && logic.hasPawn(i,j)) knightOnPawnCounter++;
+        if(this.logic.hasKnight(i,j) && this.logic.hasPawn(i,j)) knightOnPawnCounter++;
       }
     }
     assertEquals(0,knightOnPawnCounter);
@@ -47,8 +47,14 @@ public class LogicTest {
 
   @Test
   public void testBoundsChecking(){
-    assertThrows(IndexOutOfBoundsException.class, ()-> logic.hit(5,0));
-    assertThrows(IndexOutOfBoundsException.class, ()-> logic.hit(-1,8));
+    assertThrows(IndexOutOfBoundsException.class, ()-> this.logic.hit(5,0));
+    assertThrows(IndexOutOfBoundsException.class, ()-> this.logic.hit(-1,8));
+  }
+
+  @Test
+  public void testKnightNotOnPawnInitiallyMoreEfficient(){
+    System.out.println(this.logic.getKnightPosition());
+    assertNotEquals(this.logic.getKnightPosition(),this.logic.getPawnPosition());
   }
 
 }

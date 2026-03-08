@@ -8,6 +8,7 @@ public class LogicsImpl implements Logics {
 	private Pair<Integer,Integer> knight;
 	private final Random random = new Random();
 	private final int size;
+	private final KnightMoveValidator validator = new KnightMoveValidatorImpl();
 	 
     public LogicsImpl(int size){
     	this.size = size;
@@ -44,5 +45,25 @@ public class LogicsImpl implements Logics {
 	@Override
 	public boolean hasPawn(int row, int col) {
 		return this.pawn.equals(new Pair<>(row,col));
+	}
+
+	@Override
+	public Pair getKnightPosition() {
+		for(int i = 0; i < this.size; i++){
+			for (int j = 0; j < this.size; j++){
+				if (hasKnight(i,j)) return new Pair(i,j);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Pair getPawnPosition() {
+		for(int i = 0; i < this.size; i++){
+			for (int j = 0; j < this.size; j++){
+				if (hasPawn(i,j)) return new Pair(i,j);
+			}
+		}
+		return null;
 	}
 }
