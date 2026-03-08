@@ -9,11 +9,12 @@ public class LogicsImpl implements Logics {
 	private final Random random = new Random();
 	private final int size;
 	private final KnightMoveValidator validator = new KnightMoveValidatorImpl();
+	private final RandomPositionGenerator generator = new RandomPositionGenerationImpl(random);
 	 
     public LogicsImpl(int size){
     	this.size = size;
-        this.pawn = this.randomEmptyPosition();
-        this.knight = this.randomEmptyPosition();	
+        this.pawn = this.generator.generateRandomEmpty(this.size,null);
+        this.knight = this.generator.generateRandomEmpty(this.size,pawn);
     }
     
 	private final Pair<Integer,Integer> randomEmptyPosition(){
@@ -27,11 +28,9 @@ public class LogicsImpl implements Logics {
 		if (row<0 || col<0 || row >= this.size || col >= this.size) {
 			throw new IndexOutOfBoundsException();
 		}
-		// Below a compact way to express allowed moves for the knight
-		int x = row-this.knight.getX();
-		int y = col-this.knight.getY();
-		if (x!=0 && y!=0 && Math.abs(x)+Math.abs(y)==3) {
-			this.knight = new Pair<>(row,col);
+		Pair<Integer,Integer> target = new Pair<>(row,col);
+		if(validator.isValidMove(knight,target,size)){
+			knight = target;
 			return this.pawn.equals(this.knight);
 		}
 		return false;
@@ -48,20 +47,20 @@ public class LogicsImpl implements Logics {
 	}
 
 	@Override
-	public Pair getKnightPosition() {
+	public Pair<Integer,Integer> getKnightPosition() {
 		for(int i = 0; i < this.size; i++){
 			for (int j = 0; j < this.size; j++){
-				if (hasKnight(i,j)) return new Pair(i,j);
+				if (hasKnight(i,j)) return new Pair<>(i,j);
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public Pair getPawnPosition() {
+	public Pair<Integer,Integer> getPawnPosition() {
 		for(int i = 0; i < this.size; i++){
 			for (int j = 0; j < this.size; j++){
-				if (hasPawn(i,j)) return new Pair(i,j);
+				if (hasPawn(i,j)) return new Pair<>(i,j);
 			}
 		}
 		return null;

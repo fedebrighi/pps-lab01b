@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LogicTest {
   private LogicsImpl logic;
   private final int SIZE = 5;
+  private final int ZERO_POS = 0;
 
   @BeforeEach
   void init(){
@@ -15,12 +16,13 @@ public class LogicTest {
   @Test
   public void testHasOneKnight() {
     int knightCounter = 0;
+    int validNumberOfKnightsOnMap = 1;
     for (int i = 0; i < SIZE; i++){
       for (int j = 0; j < SIZE; j++){
         if(this.logic.hasKnight(i,j)) knightCounter++;
       }
     }
-    assertEquals(1,knightCounter);
+    assertEquals(validNumberOfKnightsOnMap,knightCounter);
   }
 
   @Test
@@ -47,13 +49,14 @@ public class LogicTest {
 
   @Test
   public void testBoundsChecking(){
-    assertThrows(IndexOutOfBoundsException.class, ()-> this.logic.hit(5,0));
-    assertThrows(IndexOutOfBoundsException.class, ()-> this.logic.hit(-1,8));
+    int exampleOutOfBoundsX = -1;
+    int exampleOutOfBoundsY = 6;
+    assertThrows(IndexOutOfBoundsException.class, ()-> this.logic.hit(SIZE,ZERO_POS));
+    assertThrows(IndexOutOfBoundsException.class, ()-> this.logic.hit(exampleOutOfBoundsX,exampleOutOfBoundsY));
   }
 
   @Test
   public void testKnightNotOnPawnInitiallyMoreEfficient(){
-    System.out.println(this.logic.getKnightPosition());
     assertNotEquals(this.logic.getKnightPosition(),this.logic.getPawnPosition());
   }
 
